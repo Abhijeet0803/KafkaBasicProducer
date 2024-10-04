@@ -20,20 +20,35 @@ public class KafkaProducerService {
 
     public void sendMessage(String topic, String message){
 //        kafkaTemplate.send(topic, message);
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic,message);
+        for(int i=0;i<10;i++){
 
-        future.whenComplete( ( result,  ex)->{
-            if(ex == null){
-                RecordMetadata metadata = result.getRecordMetadata();
-                logger.info("Message sent successfully!");
-                logger.info("Topic: {}" , metadata.topic());
-                logger.info("Partition: {}", metadata.partition());
-                logger.info("Offset: {}" , metadata.offset());
+            for(int j=0;j<10;j++){
+                String msg = "message"+i;
+                String key = Integer.toString(j);
+                CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic,key,msg);
+
+                future.whenComplete( ( result,  ex)->{
+                    if(ex == null){
+                        RecordMetadata metadata = result.getRecordMetadata();
+//                        logger.info("Message sent successfully!");
+                        logger.info("Key: {}, Partition: {}" , key, metadata.partition());
+//                        logger.info("Topic: {}" , metadata.topic());
+//                        logger.info("Partition: {}", metadata.partition());
+//                        logger.info("Offset: {}" , metadata.offset());
+                    }
+                    else{
+                        logger.error("Error during message producing: {}", ex.getMessage());
+                    }
+                });
             }
-            else{
-                logger.error("Error during message producing: {}", ex.getMessage());
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        });
+        }
+
     }
 
 }
