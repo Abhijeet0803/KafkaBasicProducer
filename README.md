@@ -1,4 +1,4 @@
-Kafka zookeeper:
+git Kafka zookeeper:
 
 bin/zookeeper-server-start.sh config/zookeeper.properties 
 
