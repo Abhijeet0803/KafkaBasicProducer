@@ -1,14 +1,14 @@
-git Kafka zookeeper:
+# Kafka zookeeper:
 
 bin/zookeeper-server-start.sh config/zookeeper.properties 
 
 
-Kafka Server
+# Kafka Server
 
 bin/kafka-server-start.sh config/server.properties
 
 
-Kafka Topic Creation
+# Kafka Topic Creation
 
 bin/kafka-topics.sh --create --topic user-topic --bootstrap-server localhost:9092
 
@@ -23,7 +23,7 @@ Kafka Producer
 
 bin/kafka-console-producer.sh --topic user-topic --bootstrap-server localhost:9092
 
-Kafka Consumer
+# Kafka Consumer
 
 bin/kafka-console-consumer.sh --topic user-topic --bootstrap-server localhost:9092
 
