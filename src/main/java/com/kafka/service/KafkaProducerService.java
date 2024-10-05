@@ -1,5 +1,6 @@
 package com.kafka.service;
 
+import jakarta.annotation.PreDestroy;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,18 +24,18 @@ public class KafkaProducerService {
         for(int i=0;i<10;i++){
 
             for(int j=0;j<10;j++){
-                String msg = "message"+i;
+                String msg = "message"+j;
                 String key = Integer.toString(j);
                 CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic,key,msg);
 
                 future.whenComplete( ( result,  ex)->{
                     if(ex == null){
                         RecordMetadata metadata = result.getRecordMetadata();
-//                        logger.info("Message sent successfully!");
+                        logger.info("Message sent successfully!");
                         logger.info("Key: {}, Partition: {}" , key, metadata.partition());
-//                        logger.info("Topic: {}" , metadata.topic());
-//                        logger.info("Partition: {}", metadata.partition());
-//                        logger.info("Offset: {}" , metadata.offset());
+                        logger.info("Topic: {}" , metadata.topic());
+                        logger.info("Partition: {}", metadata.partition());
+                        logger.info("Offset: {}" , metadata.offset());
                     }
                     else{
                         logger.error("Error during message producing: {}", ex.getMessage());
@@ -50,5 +51,7 @@ public class KafkaProducerService {
         }
 
     }
+
+
 
 }
